@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -55,31 +55,33 @@ jobs:
         run: if [ "$(gofmt -s -l . | tee /dev/stderr |  wc -l)" -gt 0 ]; then exit 1; fi
 
   release:
-    name: Run semantic release on main branch
+    name: Release and push Docker image
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Semantic Release
         id: release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@675661095802db68784752d440818aaac88d0964
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
         if: ${{fromJSON(steps.release.outputs.new_release_published)}}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8
         if: ${{fromJSON(steps.release.outputs.new_release_published)}}
         with:
           context: .
           push: true
-          tags: ${{ steps.release.outputs.new_release_version }}
+          tags: |
+            samjbobb/mammoth
+            samjbobb/mammoth:${{ steps.release.outputs.new_release_version }}
