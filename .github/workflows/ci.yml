@@ -65,7 +65,7 @@ jobs:
 
       - name: Semantic Release
         id: release
-        uses: cycjimmy/semantic-release-action@675661095802db68784752d440818aaac88d0964
+        uses: cycjimmy/semantic-release-action@3b88c82b34098e8b51e401c1082c9170b0a3ec3c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -82,4 +82,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ format('samjbobb/mammoth:{0}', steps.release.outputs.new_release_version) }}
+          tags: |
+            samjbobb/mammoth
+            ${{ format('samjbobb/mammoth:{0}', steps.release.outputs.new_release_version) }}
