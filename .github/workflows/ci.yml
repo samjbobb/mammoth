@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   test:
+    name: Run tests, govet, and gofmt
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
@@ -54,8 +55,9 @@ jobs:
         run: if [ "$(gofmt -s -l . | tee /dev/stderr |  wc -l)" -gt 0 ]; then exit 1; fi
 
   release:
+    name: Run semantic release on main branch
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
@@ -73,6 +75,9 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: release
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
