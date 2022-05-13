@@ -240,6 +240,13 @@ mapping of Postgres types to Snowflake types.
 - [ ] Redshift support
 - [ ] BigQuery support
 
+## What's with the name?
+
+The [PostgreSQL logo is an elephant](https://wiki.postgresql.org/wiki/Logo). Snowflake is the initial synchronization 
+target. A snowy elephant is a [mammoth](https://en.wikipedia.org/wiki/Mammoth).
+
+Thanks [@duffytilleman](https://github.com/duffytilleman).
+
 ## Contributions
 
 Contributions are welcome and encouraged. Open a PR. For larger changes, open an Issue first to discuss the approach.
