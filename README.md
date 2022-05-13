@@ -18,15 +18,30 @@ has no additional dependencies.
 
 Tested with Postgres 10 (may work for 11+, see Roadmap)
 
-## Installation
+## Quick Start
+
+Make sure that logical replication is enabled in your Postgres instance (see Usage for details).
 
 ### Docker
 
-(Easiest if you already have Docker installed)
+Create a `config.yml` file specifying which tables to replicate:
 
-Pull the container. Run it. Set environment variables. Mount the config file at `/app/config.yml`.
+```yaml
+sync:
+  tables:
+    - public.table1
+    - public.table2
+```
 
-TODO: add detailed Docker commands when this repo is built in a final location.
+Run the container. Environment variables configure the Postgres and Snowflake connections and mount the config 
+file at `/app/config.yml`:
+
+```
+docker run --rm -v $PWD/config.yml:/app/config.yml \
+-e POSTGRES_CONNECTION=postgres://user:password@localhost/db \
+-e SNOWFLAKE_CONNECTION=user:password@account/my_database/my_schema \
+samjbobb/mammoth
+```
 
 ### From Source
 
@@ -38,7 +53,12 @@ Clone this repo and build:
 go build -o mammoth ./cmd/mammoth
 ```
 
-Then execute `./mammoth` as described in *Usage*.
+Create `config.yml` as above in the same directory and run:
+
+```
+SNOWFLAKE_CONNECTION=user:password@account/my_database/my_schema \
+POSTGRES_CONNECTION=postgres://user:password@localhost/db ./mammoth
+```
 
 ## Usage
 
@@ -86,11 +106,13 @@ You must specify every table you want to replicate in Snowflake. Each table you 
 Then run:
 
 ```
-SNOWFLAKE_CONNECTION=user:password@account/my_database/my_schema \
-POSTGRES_CONNECTION=postgres://user:password@localhost/db ./mammoth
+docker run --rm -v $PWD/config.yml:/app/config.yml \
+-e POSTGRES_CONNECTION=postgres://user:password@localhost/db \
+-e SNOWFLAKE_CONNECTION=user:password@account/my_database/my_schema \
+samjbobb/mammoth
 ```
 
-Run `./mammoth --help` for a list of commands and options.
+Run `docker run --rm samjbobb/mammoth --help` for a list of commands and options.
 
 ### ⚠️ Remember to remove unused replication slots ⚠️
 

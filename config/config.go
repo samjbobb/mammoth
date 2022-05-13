@@ -53,7 +53,7 @@ var DefaultConfig = Config{
 	},
 	Postgres: PostgresCfg{
 		Connection:             "",
-		SlotName:               "",
+		SlotName:               "mammoth",
 		StandbyMessageInterval: time.Second * 10,
 	},
 	Snowflake: SnowflakeCfg{

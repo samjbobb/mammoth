@@ -6,7 +6,7 @@ sync:
   tables: []
 postgres:
   connection: ""
-  slotname: ""
+  slotname: mammoth
   standbymessageinterval: 10s
 snowflake:
   connection: ""

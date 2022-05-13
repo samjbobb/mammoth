@@ -11,4 +11,4 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /app/
 COPY --from=0 /app/mammoth ./
-CMD [ "./mammoth" ]
+ENTRYPOINT [ "./mammoth" ]
