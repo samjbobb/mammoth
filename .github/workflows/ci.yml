@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ '**' ]
+
+permissions:
+  actions: none
+  checks: none
+  contents: write
+  deployments: write
+  issues: write
+  packages: none
+  pull-requests: write
+  repository-projects: none
+  security-events: none
+  statuses: none
+
+jobs:
+  test:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      # This appears to be a good place to use [services](https://docs.github.com/en/actions/using-containerized-services/about-service-containers)
+      # However there appears to be no way to the postgres config as a volume or change the container Command, so there is no way to set wal_level=logical
+      - name: Start Postgres
+        run: docker run -d -p 5432:5432 --name pg-for-test --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=app postgres:10 -c wal_level=logical
+
+      - name: Wait for Postgres
+        run: while [ "`docker inspect -f {{.State.Health.Status}} pg-for-test`" != "healthy" ]; do     sleep 2; done
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v -coverprofile=coverage.txt -covermode=atomic -race  ./...
+        env:
+          SNOWFLAKE_CONNECTION: ${{ secrets.SNOWFLAKE_CONNECTION }}
+          POSTGRES_CONNECTION: postgres://postgres:password@localhost/app
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Fmt
+        run: if [ "$(gofmt -s -l . | tee /dev/stderr |  wc -l)" -gt 0 ]; then exit 1; fi
+
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2.1.4
+        with:
+          node-version: '14'
+
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

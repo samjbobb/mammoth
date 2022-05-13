@@ -1,0 +1,17 @@
+sync:
+  batchmaxitems: 25000
+  batchtimeout: 1m0s
+  skipacknowledge: false
+  prohibitdropslot: false
+  tables: []
+postgres:
+  connection: ""
+  slotname: ""
+  standbymessageinterval: 10s
+snowflake:
+  connection: ""
+  database: ""
+  schema: ""
+logger:
+  level: info
+  json: false

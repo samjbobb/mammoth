@@ -1,0 +1,6 @@
+**/*.*
+!**/*.go
+!vendor/modules.txt
+!go.mod
+!go.sum
+!README.md
