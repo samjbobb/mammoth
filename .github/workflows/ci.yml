@@ -82,6 +82,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            samjbobb/mammoth
-            samjbobb/mammoth:${{ steps.release.outputs.new_release_version }}
+          tags: ${{ format('samjbobb/mammoth:{0}', steps.release.outputs.new_release_version) }}
