@@ -4,9 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -16,19 +18,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const schemaName = "mammoth_e2e"
-const testConfig = `
+var schemaName = ""
+var testConfig = ""
+
+func init() {
+	schemaName = fmt.Sprintf("mammoth_e2e_%s", strings.Replace(uuid.New().String(), "-", "_", -1))
+	testConfig = fmt.Sprintf(`
 sync:
   batchmaxitems: 100
   batchtimeout: 1s
   tables: 
-    - mammoth_e2e.table1
+    - %s.table1
 postgres:
-  slotname: mammoth_e2e
-  publicationname: mammoth_e2e
+  slotname: %s
+  publicationname: %s
 snowflake:
-  schema: mammoth_e2e
-`
+  schema: %s
+`, schemaName, schemaName, schemaName, schemaName)
+}
 
 // TODO: fix goroutine leaks and re-enable this check
 //func TestMain(m *testing.M) {

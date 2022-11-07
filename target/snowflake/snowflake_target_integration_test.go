@@ -6,8 +6,10 @@ import (
 	"database/sql"
 	"encoding/csv"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/jackc/pgtype"
@@ -16,7 +18,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const schema = "snowflake_target_integration_test"
+var schema = ""
+
+func init() {
+	schema = fmt.Sprintf("snowflake_target_integration_test_%s", strings.Replace(uuid.New().String(), "-", "_", -1))
+}
 
 func TestSnowflakeTargetIntegration(t *testing.T) {
 	if testing.Short() {

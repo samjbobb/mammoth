@@ -16,7 +16,7 @@ has no additional dependencies.
 * **Operationally easy.** Switches from table creation, initial back-fill, and streaming synchronization as needed.
   All state is in Postgres and Snowflake: no additional data stores or services required.
 
-Tested with Postgres 10 (may work for 11+, see Roadmap)
+Tested with Postgres 10, 11, 12, 13, 14, 15
 
 ## Quick Start
 
@@ -231,7 +231,7 @@ mapping of Postgres types to Snowflake types.
 
 - [ ] Tests to verify Postgres output matches expectations (`stream_test.go`)
 - [ ] Tests to cover all Postgres types
-- [ ] Test with Postgres 11, 12, 13, 14
+- [x] Test with Postgres 11, 12, 13, 14
 - [ ] Add support for TRUNCATE replication (added in Postgres 11)
 - [ ] Benchmarks throughput
 - [ ] Monitoring and introspection (buffers full? are writes in progress? is syncing complete to X position / XID?
