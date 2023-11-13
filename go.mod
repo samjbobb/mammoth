@@ -10,13 +10,12 @@ require (
 	github.com/jackc/pgproto3/v2 v2.1.1
 	github.com/jackc/pgtype v1.8.1
 	github.com/jackc/pgx/v4 v4.13.0
-	github.com/kr/text v0.2.0 // indirect
-	github.com/sirupsen/logrus v1.8.1
-	github.com/snowflakedb/gosnowflake v1.6.3
+	github.com/sirupsen/logrus v1.9.0
+	github.com/snowflakedb/gosnowflake v1.6.25
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.6.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.1
 	github.com/urfave/cli/v2 v2.1.1
 	go.uber.org/goleak v1.1.12
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.4.0
 )
