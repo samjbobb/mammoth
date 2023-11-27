@@ -239,7 +239,7 @@ func TestSnowflakeTargetIntegration(t *testing.T) {
 						{"1", `{
   "a": 123,
   "b": "double quote: \" backslash: \\"
-}`, "8", "5.500000", "true", `[
+}`, "8", "5.5", "true", `[
   "foo",
   "bar",
   "bim"
@@ -280,7 +280,7 @@ func TestSnowflakeTargetIntegration(t *testing.T) {
 								{"3", `{
   "a": 123,
   "b": "double quote: \" backslash: \\"
-}`, "10", "1.200000", "false", `[
+}`, "10", "1.2", "false", `[
   [
     "one",
     "two"
